@@ -123,7 +123,7 @@ export const loader = () => {
             {
               id: 1,
               src: "https://info.ehl.edu/hubfs/Imported_Blog_Media/1440x960-cooking-terms-1.jpg",
-              alt: "Image 1",
+              alt: "Mix the eggs",
             },
           ],
         },
@@ -212,7 +212,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { property: "twitter:description", content: recipe.summary },
     { property: "twitter:image", content: recipe.images.cover },
     { property: "twitter:image:alt", content: `Image of ${recipe.name}` },
-    { itemprop: "name", content: recipe.name },
+    { itemProp: "name", content: recipe.name },
   ];
 };
 
@@ -371,7 +371,7 @@ export default function Recipe() {
   const { recipe } = useLoaderData<LoaderData>();
 
   return (
-    <article>
+    <article id="recipe">
       <section
         className="hero is-small is-link has-background-image"
         style={{
@@ -379,7 +379,7 @@ export default function Recipe() {
         }}
       >
         <div className="hero-body">
-          <p className="subtitle">{recipe.category}</p>
+          <p className="subtitle is-size-7">{recipe.category}</p>
           <h1 className="title">
             {recipe.name}
             <div className="is-size-7 mt-1">

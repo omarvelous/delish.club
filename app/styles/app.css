@@ -15,7 +15,7 @@ ol#directions > li {
   grid-column-start: 2;
 }
 
-h3 {
+#recipe h3 {
   border-bottom: 1px solid hsl(217, 71%, 29%);
   padding-bottom: 0.5em;
 }
