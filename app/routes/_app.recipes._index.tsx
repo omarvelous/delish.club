@@ -1,4 +1,5 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
+import { dasherize } from "~/lib/helpers";
 
 type LoaderData = {
   recipes: { id: number; name: string }[];
@@ -28,7 +29,9 @@ export default function Recipes() {
           {recipes.map((recipe) => (
             <div className="card" key={recipe.id}>
               <div className="card-content">
-                <h3>{recipe.name}</h3>
+                <h3>
+                  <Link to={`/recipes/${recipe.id}/${dasherize(recipe.name)}`}>{recipe.name}</Link>
+                </h3>
               </div>
             </div>
           ))}
