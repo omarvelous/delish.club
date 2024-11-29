@@ -1,4 +1,14 @@
-# Welcome to Remix!
+# RecipeDB
+
+
+## Features
+- Mark a step as complete - minimizes step
+- Multiply servings
+- One-click shopping list
+- Review and Rate
+- Save, Share
+- Create
+- Upload Images
 
 - 📖 [Remix docs](https://remix.run/docs)
 

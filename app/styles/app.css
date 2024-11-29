@@ -1,0 +1,28 @@
+ol#directions {
+  margin-left: 0;
+}
+ol#directions > li {
+  list-style-type: none;
+  margin-bottom: 3em;
+}
+
+.content dl {
+  display: grid;
+}
+.content dl dd {
+  margin: 0;
+  margin-inline-start: 0;
+  grid-column-start: 2;
+}
+
+#recipe h3 {
+  border-bottom: 1px solid hsl(217, 71%, 29%);
+  padding-bottom: 0.5em;
+}
+
+.has-background-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-top: 8em;
+}
