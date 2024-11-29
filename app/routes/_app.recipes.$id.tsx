@@ -1,8 +1,10 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
+import { MetaFunction } from "@remix-run/node";
 
 type Recipe = {
   id: number;
   name: string;
+  summary: string;
   rating: number;
   ingredients: {
     id: number;
@@ -38,11 +40,12 @@ type LoaderData = {
   recipe: Recipe;
 };
 
-export const loader = async () => {
+export const loader = () => {
   return {
     recipe: {
       id: 1,
       name: "Cookies",
+      summary: "A delicious cookie recipe.",
       rating: 5,
       ingredients: [
         {
@@ -132,6 +135,23 @@ export const loader = async () => {
   };
 };
 
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) {
+    return [];
+  }
+
+  const { recipe } = data;
+
+  return [
+    { title: recipe.name },
+    { name: "description", content: recipe.summary },
+    { property: "og:title", content: recipe.name },
+    { property: "og:description", content: recipe.summary },
+    { property: "og:url", content: "https://example.com" },
+    { property: "og:locale", content: "en_US" },
+  ];
+};
+
 export default function Recipe() {
   const { recipe } = useLoaderData<LoaderData>();
 
@@ -145,22 +165,27 @@ export default function Recipe() {
       </section>
       <div className="content">
         <section className="section">
-          <h3>Ingredients</h3>
-          <ul>
+          <p>{recipe.summary}</p>
+          <hr />
+          <h3>
+            <Link to="#ingredients">Ingredients</Link>
+          </h3>
+          <ul id="ingredients">
             {recipe.ingredients.map((ingredient) => (
               <li key={ingredient.id}>{ingredient.name}</li>
             ))}
           </ul>
-        </section>
-        <section className="section">
-          <h3>Steps</h3>
-          <ol>
+          <hr />
+          <h3>
+            <Link to="#steps">Steps</Link>
+          </h3>
+          <ol id="steps">
             {recipe.steps.map((step) => (
               <li key={step.id}>
                 <h4>{step.name}</h4>
                 {step.ingredients && (
                   <>
-                    <ul>
+                    <ul className="ingredients">
                       {step.ingredients.map((ingredient) => (
                         <li key={ingredient.id}>
                           {ingredient.name}{" "}
@@ -180,18 +205,22 @@ export default function Recipe() {
               </li>
             ))}
           </ol>
-        </section>
-        <section className="section">
-          <h3>Reviews</h3>
-          <ul>
+          <hr />
+          <h3>
+            <Link to="#reviews">Reviews</Link>
+          </h3>
+          <ul id="reviews">
             {recipe.reviews.map((review) => (
               <li key={review.id}>
                 <div className="has-text-warning">
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-regular fa-star-half-stroke"></i>
+                  <i aria-hidden="true" className="fa-solid fa-star"></i>
+                  <i aria-hidden="true" className="fa-solid fa-star"></i>
+                  <i aria-hidden="true" className="fa-solid fa-star"></i>
+                  <i aria-hidden="true" className="fa-solid fa-star"></i>
+                  <i
+                    aria-hidden="true"
+                    className="fa-regular fa-star-half-stroke"
+                  ></i>
                 </div>
                 <p>{review.comment}</p>
                 <p>By: {review.user.name}</p>
