@@ -1,9 +1,9 @@
-ol#steps {
+ol#directions {
   margin-left: 0;
 }
-ol#steps > li {
+ol#directions > li {
   list-style-type: none;
-  margin-bottom: 2em;
+  margin-bottom: 3em;
 }
 
 .content dl {
@@ -13,4 +13,9 @@ ol#steps > li {
   margin: 0;
   margin-inline-start: 0;
   grid-column-start: 2;
+}
+
+h3 {
+  border-bottom: 1px solid hsl(217, 71%, 29%);
+  padding-bottom: 0.5em;
 }
