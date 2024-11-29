@@ -180,9 +180,11 @@ export default function Recipe() {
             <Link to="#steps">Steps</Link>
           </h3>
           <ol id="steps">
-            {recipe.steps.map((step) => (
+            {recipe.steps.map((step, i) => (
               <li key={step.id}>
-                <h4>{step.name}</h4>
+                <h4>
+                  <Link to={`#step-${i+1}`}>{step.name}</Link>
+                </h4>
                 {step.ingredients && (
                   <>
                     <ul className="ingredients">
