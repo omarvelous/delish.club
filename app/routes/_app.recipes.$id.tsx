@@ -1,11 +1,23 @@
 import { useLoaderData, Link } from "@remix-run/react";
 import { MetaFunction } from "@remix-run/node";
 
-type Recipe = {
+enum StepTypeEnum {
+  Prep,
+  Cook,
+}
+
+type RecipeType = {
   id: number;
   name: string;
   summary: string;
+  category: string;
   rating: number;
+  details: {
+    prepTime: number;
+    cookTime: number;
+    totalTime: number;
+    servings: number;
+  };
   ingredients: {
     id: number;
     name: string;
@@ -14,6 +26,8 @@ type Recipe = {
     id: number;
     name: string;
     description: string;
+    type: StepTypeEnum;
+    timeInSeconds: number;
     ingredients: {
       id: number;
       name: string;
@@ -34,10 +48,16 @@ type Recipe = {
       name: string;
     };
   }[];
+  nutrition: {
+    calories: number;
+    fat: number;
+    carbs: number;
+    protein: number;
+  };
 };
 
 type LoaderData = {
-  recipe: Recipe;
+  recipe: RecipeType;
 };
 
 export const loader = () => {
@@ -46,7 +66,14 @@ export const loader = () => {
       id: 1,
       name: "Cookies",
       summary: "A delicious cookie recipe.",
+      category: "Dessert",
       rating: 5,
+      details: {
+        prepTime: 10,
+        cookTime: 20,
+        totalTime: 30,
+        servings: 12,
+      },
       ingredients: [
         {
           id: 1,
@@ -63,6 +90,8 @@ export const loader = () => {
           name: "Mix the Batter",
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta lacus vitae urna auctor, et imperdiet nisl vestibulum. Ut vitae risus a metus rhoncus tincidunt.",
+          type: StepTypeEnum.Prep,
+          timeInSeconds: 300,
           ingredients: [
             {
               id: 1,
@@ -88,6 +117,8 @@ export const loader = () => {
           name: "Mix the Eggs",
           description:
             "Nunc tempor mattis nunc, eget tincidunt ligula vehicula eget.",
+          type: StepTypeEnum.Prep,
+          timeInSeconds: 300,
           ingredients: [
             {
               id: 1,
@@ -107,6 +138,8 @@ export const loader = () => {
           name: "Bake the Cake",
           description:
             "Donec in volutpat augue, eu feugiat sapien. Morbi id nunc eu ipsum dapibus eleifend quis et lorem.",
+          type: StepTypeEnum.Cook,
+          timeInSeconds: 300,
           ingredients: [],
           images: [],
         },
@@ -131,6 +164,12 @@ export const loader = () => {
           },
         },
       ],
+      nutrition: {
+        calories: 100,
+        fat: 10,
+        carbs: 20,
+        protein: 5,
+      },
     },
   };
 };
@@ -152,83 +191,180 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
+const Ingredients = ({
+  ingredients,
+}: {
+  ingredients: RecipeType["ingredients"];
+}) => {
+  return (
+    <>
+      <h3>
+        <span className="icon-text">
+          <span className="icon has-text-link">
+            <i aria-hidden="true" className="fa-solid fa-egg"></i>
+          </span>
+          <Link to="#ingredients">Ingredients</Link>
+        </span>
+      </h3>
+      <ul id="ingredients">
+        {ingredients.map((ingredient) => (
+          <li key={ingredient.id}>{ingredient.name}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
+
+const Steps = ({ steps }: { steps: RecipeType["steps"] }) => {
+  return (
+    <>
+      <h3>
+        <span className="icon-text">
+          <span className="icon has-text-link">
+            <i aria-hidden="true" className="fa-solid fa-list-check"></i>
+          </span>
+          <Link to="#steps">Steps</Link>
+        </span>
+      </h3>
+      <ol id="steps">
+        {steps.map((step, i) => (
+          <li key={step.id}>
+            <span className="has-text-weight-semibold">Step {i + 1}</span>
+            <h4>
+              <span className="mr-1">
+                <input type="checkbox" />
+              </span>
+              <Link to={`#step-${i + 1}`}>{step.name}</Link>
+              <span className="subtitle is-size-6 is-pulled-right">
+                <span className="icon-text">
+                  <span className="icon">
+                    <i aria-hidden="true" className="fa-regular fa-clock"></i>
+                  </span>
+                  {step.timeInSeconds} sec
+                </span>
+              </span>
+            </h4>
+            {step.ingredients && (
+              <>
+                <ul className="ingredients">
+                  {step.ingredients.map((ingredient) => (
+                    <li key={ingredient.id}>
+                      {ingredient.name}{" "}
+                      {ingredient.amount && <>- {ingredient.amount}</>}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <p>{step.description}</p>
+            {step.images.map((image) => (
+              <figure key={image.id}>
+                <img src={image.src} alt={image.alt} />
+                <figcaption>{image.alt}</figcaption>
+              </figure>
+            ))}
+          </li>
+        ))}
+      </ol>
+    </>
+  );
+};
+
+const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
+  return (
+    <>
+      <h3>
+        <span className="icon-text">
+          <span className="icon has-text-link">
+            <i aria-hidden="true" className="fa-solid fa-apple-alt"></i>
+          </span>
+          <Link to="#nutrition">Nutrition</Link>
+        </span>
+        <span className="subtitle is-size-6 is-pulled-right">per serving</span>
+      </h3>
+      <dl id="nutrition">
+        <dt className="has-text-weight-semibold">Calories</dt>
+        <dd>{nutrition.calories}</dd>
+        <dt className="has-text-weight-semibold">Fat</dt>
+        <dd>{nutrition.fat}g</dd>
+        <dt className="has-text-weight-semibold">Carbs</dt>
+        <dd>{nutrition.carbs}g</dd>
+        <dt className="has-text-weight-semibold">Protein</dt>
+        <dd>{nutrition.protein}g</dd>
+      </dl>
+    </>
+  );
+};
+
+const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
+  return (
+    <>
+      <h3>
+        <span className="icon-text">
+          <span className="icon has-text-link">
+            <i aria-hidden="true" className="fa-solid fa-star"></i>
+          </span>
+          <Link to="#reviews">Reviews</Link>
+        </span>
+        <span className="subtitle is-size-6 is-pulled-right">
+          {reviews.length}
+        </span>
+      </h3>
+      <ul id="reviews">
+        {reviews.map((review) => (
+          <li key={review.id}>
+            <div className="has-text-warning">
+              <i aria-hidden="true" className="fa-solid fa-star"></i>
+              <i aria-hidden="true" className="fa-solid fa-star"></i>
+              <i aria-hidden="true" className="fa-solid fa-star"></i>
+              <i aria-hidden="true" className="fa-solid fa-star"></i>
+              <i
+                aria-hidden="true"
+                className="fa-regular fa-star-half-stroke"
+              ></i>
+            </div>
+            <p>{review.comment}</p>
+            <p>By: {review.user.name}</p>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+};
+
 export default function Recipe() {
   const { recipe } = useLoaderData<LoaderData>();
 
   return (
     <article>
-      <section className="hero is-small is-info">
+      <section className="hero is-small is-link">
         <div className="hero-body">
-          <p className="subtitle is-size-7">Dessert</p>
+          <p className="subtitle">{recipe.category}</p>
           <h1 className="title">{recipe.name}</h1>
         </div>
       </section>
       <div className="content">
         <section className="section">
-          <p>{recipe.summary}</p>
+          <blockquote>{recipe.summary}</blockquote>
+          <h4>Details</h4>
+          <dl>
+            <dt className="has-text-weight-semibold">Prep Time</dt>
+            <dd>{recipe.details.prepTime} min</dd>
+            <dt className="has-text-weight-semibold">Cook Time</dt>
+            <dd>{recipe.details.cookTime} min</dd>
+            <dt className="has-text-weight-semibold">Total Time</dt>
+            <dd>{recipe.details.cookTime + recipe.details.prepTime} min</dd>
+            <dt className="has-text-weight-semibold">Servings</dt>
+            <dd>{recipe.details.servings}</dd>
+          </dl>
           <hr />
-          <h3>
-            <Link to="#ingredients">Ingredients</Link>
-          </h3>
-          <ul id="ingredients">
-            {recipe.ingredients.map((ingredient) => (
-              <li key={ingredient.id}>{ingredient.name}</li>
-            ))}
-          </ul>
+          <Ingredients ingredients={recipe.ingredients} />
           <hr />
-          <h3>
-            <Link to="#steps">Steps</Link>
-          </h3>
-          <ol id="steps">
-            {recipe.steps.map((step, i) => (
-              <li key={step.id}>
-                <h4>
-                  <Link to={`#step-${i+1}`}>{step.name}</Link>
-                </h4>
-                {step.ingredients && (
-                  <>
-                    <ul className="ingredients">
-                      {step.ingredients.map((ingredient) => (
-                        <li key={ingredient.id}>
-                          {ingredient.name}{" "}
-                          {ingredient.amount && <>- {ingredient.amount}</>}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-                <p>{step.description}</p>
-                {step.images.map((image) => (
-                  <figure key={image.id}>
-                    <img src={image.src} alt={image.alt} />
-                    <figcaption>{image.alt}</figcaption>
-                  </figure>
-                ))}
-              </li>
-            ))}
-          </ol>
+          <Steps steps={recipe.steps} />
           <hr />
-          <h3>
-            <Link to="#reviews">Reviews</Link>
-          </h3>
-          <ul id="reviews">
-            {recipe.reviews.map((review) => (
-              <li key={review.id}>
-                <div className="has-text-warning">
-                  <i aria-hidden="true" className="fa-solid fa-star"></i>
-                  <i aria-hidden="true" className="fa-solid fa-star"></i>
-                  <i aria-hidden="true" className="fa-solid fa-star"></i>
-                  <i aria-hidden="true" className="fa-solid fa-star"></i>
-                  <i
-                    aria-hidden="true"
-                    className="fa-regular fa-star-half-stroke"
-                  ></i>
-                </div>
-                <p>{review.comment}</p>
-                <p>By: {review.user.name}</p>
-              </li>
-            ))}
-          </ul>
+          <Nutrition nutrition={recipe.nutrition} />
+          <hr />
+          <Reviews reviews={recipe.reviews} />
         </section>
       </div>
     </article>

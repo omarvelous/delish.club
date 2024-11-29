@@ -1,3 +1,16 @@
-#steps > li {
+ol#steps {
+  margin-left: 0;
+}
+ol#steps > li {
+  list-style-type: none;
   margin-bottom: 2em;
+}
+
+.content dl {
+  display: grid;
+}
+.content dl dd {
+  margin: 0;
+  margin-inline-start: 0;
+  grid-column-start: 2;
 }
