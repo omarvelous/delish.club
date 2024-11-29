@@ -12,12 +12,12 @@ type Recipe = {
     id: number;
     name: string;
     description: string;
-    ingredients?: {
+    ingredients: {
       id: number;
       name: string;
       amount: string;
     }[];
-    images?: {
+    images: {
       id: number;
       src: string;
       alt: string;
@@ -89,6 +89,7 @@ export const loader = async () => {
             {
               id: 1,
               name: "Ingredient 1",
+              amount: null,
             },
             {
               id: 2,
@@ -96,12 +97,15 @@ export const loader = async () => {
               amount: "2 cups",
             },
           ],
+          images: [],
         },
         {
           id: 3,
           name: "Bake the Cake",
           description:
             "Donec in volutpat augue, eu feugiat sapien. Morbi id nunc eu ipsum dapibus eleifend quis et lorem.",
+          ingredients: [],
+          images: [],
         },
       ],
       reviews: [
@@ -132,51 +136,70 @@ export default function Recipe() {
   const { recipe } = useLoaderData<LoaderData>();
 
   return (
-    <div>
-      <h1>{recipe.name}</h1>
-      <h2>Ingredients</h2>
-      <ul>
-        {recipe.ingredients.map((ingredient) => (
-          <li key={ingredient.id}>{ingredient.name}</li>
-        ))}
-      </ul>
-      <h2>Steps</h2>
-      <ol>
-        {recipe.steps.map((step) => (
-          <li key={step.id}>
-            <h3>{step.name}</h3>
-            {step.ingredients && (
-              <ul>
-                {step.ingredients.map((ingredient) => (
-                  <li key={ingredient.id}>
-                    {ingredient.name} - {ingredient.amount}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {step.images && (
-              <ul>
+    <article>
+      <section className="hero is-small is-info">
+        <div className="hero-body">
+          <p className="subtitle is-size-7">Dessert</p>
+          <h1 className="title">{recipe.name}</h1>
+        </div>
+      </section>
+      <div className="content">
+        <section className="section">
+          <h3>Ingredients</h3>
+          <ul>
+            {recipe.ingredients.map((ingredient) => (
+              <li key={ingredient.id}>{ingredient.name}</li>
+            ))}
+          </ul>
+        </section>
+        <section className="section">
+          <h3>Steps</h3>
+          <ol>
+            {recipe.steps.map((step) => (
+              <li key={step.id}>
+                <h4>{step.name}</h4>
+                {step.ingredients && (
+                  <>
+                    <ul>
+                      {step.ingredients.map((ingredient) => (
+                        <li key={ingredient.id}>
+                          {ingredient.name}{" "}
+                          {ingredient.amount && <>- {ingredient.amount}</>}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                <p>{step.description}</p>
                 {step.images.map((image) => (
-                  <li key={image.id}>
+                  <figure key={image.id}>
                     <img src={image.src} alt={image.alt} />
-                  </li>
+                    <figcaption>{image.alt}</figcaption>
+                  </figure>
                 ))}
-              </ul>
-            )}
-            <p>{step.description}</p>
-          </li>
-        ))}
-      </ol>
-      <h2>Reviews</h2>
-      <ul>
-        {recipe.reviews.map((review) => (
-          <li key={review.id}>
-            <h3>Rating: {review.rating}</h3>
-            <p>{review.comment}</p>
-            <p>By: {review.user.name}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+        <section className="section">
+          <h3>Reviews</h3>
+          <ul>
+            {recipe.reviews.map((review) => (
+              <li key={review.id}>
+                <div className="has-text-warning">
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-regular fa-star-half-stroke"></i>
+                </div>
+                <p>{review.comment}</p>
+                <p>By: {review.user.name}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </article>
   );
 }
