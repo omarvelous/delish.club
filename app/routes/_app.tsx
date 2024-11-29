@@ -13,7 +13,7 @@ const Header = () => (
           <span className="icon">
             <i aria-hidden="true" className="fas fa-utensils"></i>
           </span>
-          RecipeDB
+          Delish.club
         </a>
 
         <a

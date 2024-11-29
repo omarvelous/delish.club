@@ -17,6 +17,10 @@ type RecipeType = {
     cookTime: number;
     totalTime: number;
     servings: number;
+    yield: {
+      amount: number;
+      unit: string;
+    };
   };
   images: {
     cover: string;
@@ -80,6 +84,10 @@ export const loader = () => {
         cookTime: 20,
         totalTime: 30,
         servings: 12,
+        yield: {
+          amount: 12,
+          unit: "cookies",
+        },
       },
       ingredients: [
         {
@@ -191,10 +199,20 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
     { title: recipe.name },
     { name: "description", content: recipe.summary },
+    { property: "og:type", content: "article" },
     { property: "og:title", content: recipe.name },
     { property: "og:description", content: recipe.summary },
+    { property: "og:site_name", content: "Delish.club" },
     { property: "og:url", content: "https://example.com" },
     { property: "og:locale", content: "en_US" },
+    { property: "og:image", content: recipe.images.cover },
+    { property: "twitter:card", content: "summary_large_image" },
+    { property: "twitter:site", content: "@delish.club" },
+    { property: "twitter:title", content: recipe.name },
+    { property: "twitter:description", content: recipe.summary },
+    { property: "twitter:image", content: recipe.images.cover },
+    { property: "twitter:image:alt", content: `Image of ${recipe.name}` },
+    { itemprop: "name", content: recipe.name },
   ];
 };
 
@@ -215,7 +233,9 @@ const Ingredients = ({
       </h3>
       <ul id="ingredients">
         {ingredients.map((ingredient) => (
-          <li key={ingredient.id}>{ingredient.name}</li>
+          <li key={ingredient.id} itemProp="ingredients">
+            {ingredient.name}
+          </li>
         ))}
       </ul>
     </div>
@@ -309,6 +329,17 @@ const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
   );
 };
 
+const Rating = ({ rating }: { rating: number }) => {
+  return (
+    <div className="has-text-warning">
+      <i aria-hidden="true" className="fa-solid fa-star"></i>
+      <i aria-hidden="true" className="fa-solid fa-star"></i>
+      <i aria-hidden="true" className="fa-solid fa-star"></i>
+      <i aria-hidden="true" className="fa-solid fa-star"></i>
+      <i aria-hidden="true" className="fa-regular fa-star-half-stroke"></i>
+    </div>
+  );
+};
 const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
   return (
     <div className="mt-6">
@@ -326,16 +357,7 @@ const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
       <ul id="reviews">
         {reviews.map((review) => (
           <li key={review.id}>
-            <div className="has-text-warning">
-              <i aria-hidden="true" className="fa-solid fa-star"></i>
-              <i aria-hidden="true" className="fa-solid fa-star"></i>
-              <i aria-hidden="true" className="fa-solid fa-star"></i>
-              <i aria-hidden="true" className="fa-solid fa-star"></i>
-              <i
-                aria-hidden="true"
-                className="fa-regular fa-star-half-stroke"
-              ></i>
-            </div>
+            <Rating rating={review.rating} />
             <p>{review.comment}</p>
             <p>By: {review.user.name}</p>
           </li>
@@ -358,7 +380,12 @@ export default function Recipe() {
       >
         <div className="hero-body">
           <p className="subtitle">{recipe.category}</p>
-          <h1 className="title">{recipe.name}</h1>
+          <h1 className="title">
+            {recipe.name}
+            <div className="is-size-7 mt-1">
+              <Rating rating={recipe.rating} />
+            </div>
+          </h1>
         </div>
       </section>
       <div className="content">
@@ -367,13 +394,19 @@ export default function Recipe() {
           <h4>Details</h4>
           <dl>
             <dt className="has-text-weight-semibold">Prep Time</dt>
-            <dd>{recipe.details.prepTime} min</dd>
+            <dd itemProp="prepTime">{recipe.details.prepTime} min</dd>
             <dt className="has-text-weight-semibold">Cook Time</dt>
-            <dd>{recipe.details.cookTime} min</dd>
+            <dd itemProp="cookTime">{recipe.details.cookTime} min</dd>
             <dt className="has-text-weight-semibold">Total Time</dt>
-            <dd>{recipe.details.cookTime + recipe.details.prepTime} min</dd>
+            <dd itemProp="totalTime">
+              {recipe.details.cookTime + recipe.details.prepTime} min
+            </dd>
             <dt className="has-text-weight-semibold">Servings</dt>
             <dd>{recipe.details.servings}</dd>
+            <dt className="has-text-weight-semibold">Yield</dt>
+            <dd itemProp="recipeYield">
+              {recipe.details.yield.amount} {recipe.details.yield.unit}
+            </dd>
           </dl>
           <Ingredients ingredients={recipe.ingredients} />
           <Directions directions={recipe.directions} />
