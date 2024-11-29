@@ -18,6 +18,9 @@ type RecipeType = {
     totalTime: number;
     servings: number;
   };
+  images: {
+    cover: string;
+  };
   ingredients: {
     id: number;
     name: string;
@@ -68,6 +71,10 @@ export const loader = () => {
       summary: "A delicious cookie recipe.",
       category: "Dessert",
       rating: 5,
+      images: {
+        cover:
+          "https://cdn.loveandlemons.com/wp-content/uploads/2024/08/chocolate-chip-cookie-recipe.jpg",
+      },
       details: {
         prepTime: 10,
         cookTime: 20,
@@ -197,7 +204,7 @@ const Ingredients = ({
   ingredients: RecipeType["ingredients"];
 }) => {
   return (
-    <>
+    <div className="mt-6">
       <h3>
         <span className="icon-text">
           <span className="icon has-text-link">
@@ -211,13 +218,17 @@ const Ingredients = ({
           <li key={ingredient.id}>{ingredient.name}</li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 
-const Directions = ({ directions }: { directions: RecipeType["directions"] }) => {
+const Directions = ({
+  directions,
+}: {
+  directions: RecipeType["directions"];
+}) => {
   return (
-    <>
+    <div className="mt-6">
       <h3>
         <span className="icon-text">
           <span className="icon has-text-link">
@@ -266,13 +277,13 @@ const Directions = ({ directions }: { directions: RecipeType["directions"] }) =>
           </li>
         ))}
       </ol>
-    </>
+    </div>
   );
 };
 
 const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
   return (
-    <>
+    <div className="mt-6">
       <h3>
         <span className="icon-text">
           <span className="icon has-text-link">
@@ -294,13 +305,13 @@ const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
         <dt className="has-text-weight-semibold">Protein</dt>
         <dd>{nutrition.protein}g</dd>
       </dl>
-    </>
+    </div>
   );
 };
 
 const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
   return (
-    <>
+    <div className="mt-6">
       <h3>
         <span className="icon-text">
           <span className="icon has-text-link">
@@ -330,7 +341,7 @@ const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 
@@ -339,7 +350,12 @@ export default function Recipe() {
 
   return (
     <article>
-      <section className="hero is-small is-link">
+      <section
+        className="hero is-small is-link has-background-image"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(66, 88, 255, 0.2), rgba(66, 88, 255, .9), rgba(66, 88, 255, 1)), url(${recipe.images.cover})`,
+        }}
+      >
         <div className="hero-body">
           <p className="subtitle">{recipe.category}</p>
           <h1 className="title">{recipe.name}</h1>
