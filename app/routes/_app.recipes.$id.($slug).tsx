@@ -10,7 +10,9 @@ type RecipeType = {
   id: number;
   name: string;
   summary: string;
+  publishedAtDate: string;
   category: string;
+  cuisine: string;
   rating: number;
   details: {
     prepTime: number;
@@ -29,7 +31,7 @@ type RecipeType = {
     id: number;
     name: string;
   }[];
-  directions: {
+  instructions: {
     id: number;
     name: string;
     description: string;
@@ -73,8 +75,10 @@ export const loader = () => {
       id: 1,
       name: "Cookies",
       summary: "A delicious cookie recipe.",
+      publishedAtDate: "2024-08-01",
       category: "Dessert",
-      rating: 5,
+      cuisine: "American",
+      rating: 4.5,
       images: {
         cover:
           "https://cdn.loveandlemons.com/wp-content/uploads/2024/08/chocolate-chip-cookie-recipe.jpg",
@@ -99,7 +103,7 @@ export const loader = () => {
           name: "Ingredient 2",
         },
       ],
-      directions: [
+      instructions: [
         {
           id: 1,
           name: "Mix the Batter",
@@ -242,10 +246,10 @@ const Ingredients = ({
   );
 };
 
-const Directions = ({
-  directions,
+const Instructions = ({
+  instructions,
 }: {
-  directions: RecipeType["directions"];
+  instructions: RecipeType["instructions"];
 }) => {
   return (
     <div className="mt-6">
@@ -254,11 +258,11 @@ const Directions = ({
           <span className="icon has-text-link">
             <i aria-hidden="true" className="fa-solid fa-list-check"></i>
           </span>
-          <Link to="#directions">Directions</Link>
+          <Link to="#instructions">Instructions</Link>
         </span>
       </h3>
-      <ol id="directions">
-        {directions.map((direction, i) => (
+      <ol id="instructions">
+        {instructions.map((direction, i) => (
           <li key={direction.id}>
             <span className="has-text-weight-semibold">Step {i + 1}</span>
             <h4>
@@ -331,15 +335,19 @@ const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
 
 const Rating = ({ rating }: { rating: number }) => {
   return (
-    <div className="has-text-warning">
-      <i aria-hidden="true" className="fa-solid fa-star"></i>
-      <i aria-hidden="true" className="fa-solid fa-star"></i>
-      <i aria-hidden="true" className="fa-solid fa-star"></i>
-      <i aria-hidden="true" className="fa-solid fa-star"></i>
-      <i aria-hidden="true" className="fa-regular fa-star-half-stroke"></i>
+    <div className="">
+      <div className="has-text-warning is-pulled-left">
+        <i aria-hidden="true" className="fa-solid fa-star"></i>
+        <i aria-hidden="true" className="fa-solid fa-star"></i>
+        <i aria-hidden="true" className="fa-solid fa-star"></i>
+        <i aria-hidden="true" className="fa-solid fa-star"></i>
+        <i aria-hidden="true" className="fa-regular fa-star-half-stroke"></i>
+      </div>
+      <span className="ml-2">{rating}</span>
     </div>
   );
 };
+
 const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
   return (
     <div className="mt-6">
@@ -364,6 +372,50 @@ const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
         ))}
       </ul>
     </div>
+  );
+};
+
+const StructuredData = ({ recipe }: { recipe: RecipeType }) => {
+  // https://developers.google.com/search/docs/appearance/structured-data/recipe
+  const content = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: recipe.name,
+    image: recipe.images.cover,
+    datePublished: recipe.publishedAtDate,
+    description: recipe.summary,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: recipe.rating,
+      reviewCount: recipe.reviews.length,
+    },
+    recipeIngredient: recipe.ingredients.map(
+      (ingredient) => ingredient.name,
+    ),
+    recipeInstructions: recipe.instructions.map((instruction) => ({
+      "@type": "HowToStep",
+      text: instruction.description,
+    })),
+    recipeYield: [
+      recipe.details.servings,
+      `${recipe.details.yield.amount} ${recipe.details.yield.unit}`,
+    ],
+    prepTime: `PT${recipe.details.prepTime}M`,
+    cookTime: `PT${recipe.details.cookTime}M`,
+    totalTime: `PT${recipe.details.totalTime}M`,
+    recipeCategory: recipe.category,
+    recipeCuisine: recipe.cuisine,
+    nutrition: {
+      "@type": "NutritionInformation",
+      calories: recipe.nutrition.calories,
+      fatContent: `${recipe.nutrition.fat}g`,
+      carbohydrateContent: `${recipe.nutrition.carbs}g`,
+      proteinContent: `${recipe.nutrition.protein}g`,
+    },
+  };
+
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `${JSON.stringify(content)}` }} />
   );
 };
 
@@ -409,11 +461,12 @@ export default function Recipe() {
             </dd>
           </dl>
           <Ingredients ingredients={recipe.ingredients} />
-          <Directions directions={recipe.directions} />
+          <Instructions instructions={recipe.instructions} />
           <Nutrition nutrition={recipe.nutrition} />
           <Reviews reviews={recipe.reviews} />
         </section>
       </div>
+      <StructuredData recipe={recipe} />
     </article>
   );
 }

@@ -1,9 +1,11 @@
-ol#directions {
+ol#instructions {
   margin-left: 0;
 }
-ol#directions > li {
+ol#instructions > li {
+  border-bottom: 1px solid #EEE;
   list-style-type: none;
-  margin-bottom: 3em;
+  margin-bottom: 2em;
+  padding-bottom: 2em;
 }
 
 .content dl {
@@ -13,6 +15,7 @@ ol#directions > li {
   margin: 0;
   margin-inline-start: 0;
   grid-column-start: 2;
+  text-align: right;
 }
 
 #recipe h3 {
