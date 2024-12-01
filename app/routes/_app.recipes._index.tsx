@@ -30,7 +30,9 @@ export default function Recipes() {
             <div className="card" key={recipe.id}>
               <div className="card-content">
                 <h3>
-                  <Link to={`/recipes/${recipe.id}/${dasherize(recipe.name)}`}>{recipe.name}</Link>
+                  <Link to={`/recipes/${recipe.id}/${dasherize(recipe.name)}`}>
+                    {recipe.name}
+                  </Link>
                 </h3>
               </div>
             </div>
