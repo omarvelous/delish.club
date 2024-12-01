@@ -13,6 +13,10 @@ ul#reviews {
   margin-left: 0;
 }
 
+ul.pagination-list {
+  margin: 0 !important;
+}
+
 .content dl {
   display: grid;
 }

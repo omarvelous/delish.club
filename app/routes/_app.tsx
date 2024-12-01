@@ -31,9 +31,9 @@ const Footer = () => (
 export default function App() {
   return (
     <>
-    <Header />
-    <Outlet />
-    <Footer />
+      <Header />
+      <Outlet />
+      <Footer />
     </>
   );
 }
