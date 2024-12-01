@@ -1,6 +1,8 @@
 import { useLoaderData, Link } from "@remix-run/react";
 import { MetaFunction } from "@remix-run/node";
 
+import Stars from "~/components/stars";
+
 enum DirectionTypeEnum {
   Prep,
   Cook,
@@ -313,7 +315,7 @@ const Instructions = ({
             </h4>
             {direction.ingredients && (
               <>
-                <ul className="ingredients is-size-7">
+                <ul className="ingredients">
                   {direction.ingredients.map((ingredient) => (
                     <li key={ingredient.id}>
                       {ingredient.name}{" "}
@@ -362,30 +364,6 @@ const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
         <dd>{nutrition.protein}g</dd>
       </dl>
     </div>
-  );
-};
-
-const Stars = ({ rating }: { rating: number }) => {
-  function className(rating: number, i: number) {
-    let className = "fa-regular fa-star";
-
-    if (rating >= i) {
-      className = "fa-solid fa-star";
-    } else if (i - rating <= 0.5) {
-      className = "fa-solid fa-star-half-stroke";
-    }
-
-    return className;
-  }
-
-  return (
-    <>
-      <i key={1} aria-hidden="true" className={className(rating, 1)}></i>
-      <i key={2} aria-hidden="true" className={className(rating, 2)}></i>
-      <i key={3} aria-hidden="true" className={className(rating, 3)}></i>
-      <i key={4} aria-hidden="true" className={className(rating, 4)}></i>
-      <i key={5} aria-hidden="true" className={className(rating, 5)}></i>
-    </>
   );
 };
 

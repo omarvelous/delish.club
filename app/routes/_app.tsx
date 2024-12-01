@@ -30,7 +30,7 @@ const Footer = () => (
 
 export default function App() {
   return (
-    <div className="container is-max-desktop">
+    <div className="container is-fullhd">
       <Header />
       <Outlet />
       <Footer />

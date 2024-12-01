@@ -15,6 +15,11 @@ ToDo:
 - Pinterest - https://developers.pinterest.com/docs/web-features/recipe-rich-pins/
 - Facebook - 
 - Twitter -
+- h-recipe - https://microformats.org/wiki/h-recipes
+- Schema.org
+-- https://schema.org/HowToSection
+-- https://schema.org/Recipe
+
 
 - 📖 [Remix docs](https://remix.run/docs)
 
