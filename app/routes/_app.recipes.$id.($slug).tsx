@@ -223,6 +223,35 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
+const Details = ({ details }: { details: RecipeType["details"] }) => {
+  return (
+    <div className="mt-6">
+      <h3>
+        <span className="icon-text">
+          <span className="icon has-text-link">
+            <i aria-hidden="true" className="fa-solid fa-circle-info"></i>
+          </span>
+          <Link to="#details">Details</Link>
+        </span>
+      </h3>
+      <dl id="details">
+        <dt className="has-text-weight-semibold">Prep Time</dt>
+        <dd>{details.prepTime} min</dd>
+        <dt className="has-text-weight-semibold">Cook Time</dt>
+        <dd>{details.cookTime} min</dd>
+        <dt className="has-text-weight-semibold">Total Time</dt>
+        <dd>{details.totalTime} min</dd>
+        <dt className="has-text-weight-semibold">Servings</dt>
+        <dd>{details.servings}</dd>
+        <dt className="has-text-weight-semibold">Yield</dt>
+        <dd>
+          {details.yield.amount} {details.yield.unit}
+        </dd>
+      </dl>
+    </div>
+  );
+};
+
 const Ingredients = ({
   ingredients,
 }: {
@@ -360,7 +389,13 @@ const Stars = ({ rating }: { rating: number }) => {
   );
 };
 
-const Reviews = ({ rating, reviews }: { rating: RecipeType["rating"], reviews: RecipeType["reviews"] }) => {
+const Reviews = ({
+  rating,
+  reviews,
+}: {
+  rating: RecipeType["rating"];
+  reviews: RecipeType["reviews"];
+}) => {
   return (
     <div className="mt-6">
       <h3>
@@ -368,7 +403,9 @@ const Reviews = ({ rating, reviews }: { rating: RecipeType["rating"], reviews: R
           <span className="icon has-text-link">
             <i aria-hidden="true" className="fa-solid fa-star"></i>
           </span>
-          <Link to="#reviews">Reviews <span className="subtitle is-size-6">{rating}</span></Link>
+          <Link to="#reviews">
+            Reviews <span className="subtitle is-size-6">{rating}</span>
+          </Link>
         </span>
         <span className="subtitle is-size-6 is-pulled-right has-text-grey">
           ({reviews.length})
@@ -466,27 +503,23 @@ export default function Recipe() {
       <div className="content">
         <section className="section">
           <blockquote>{recipe.summary}</blockquote>
-          <h4>Details</h4>
-          <dl>
-            <dt className="has-text-weight-semibold">Prep Time</dt>
-            <dd itemProp="prepTime">{recipe.details.prepTime} min</dd>
-            <dt className="has-text-weight-semibold">Cook Time</dt>
-            <dd itemProp="cookTime">{recipe.details.cookTime} min</dd>
-            <dt className="has-text-weight-semibold">Total Time</dt>
-            <dd itemProp="totalTime">
-              {recipe.details.cookTime + recipe.details.prepTime} min
-            </dd>
-            <dt className="has-text-weight-semibold">Servings</dt>
-            <dd>{recipe.details.servings}</dd>
-            <dt className="has-text-weight-semibold">Yield</dt>
-            <dd itemProp="recipeYield">
-              {recipe.details.yield.amount} {recipe.details.yield.unit}
-            </dd>
-          </dl>
-          <Ingredients ingredients={recipe.ingredients} />
+          <div className="columns">
+            <div className="column is-one-third">
+              <Details details={recipe.details} />
+            </div>
+            <div className="column">
+              <Ingredients ingredients={recipe.ingredients} />
+            </div>
+          </div>
           <Instructions instructions={recipe.instructions} />
-          <Nutrition nutrition={recipe.nutrition} />
-          <Reviews rating={recipe.rating} reviews={recipe.reviews} />
+          <div className="columns">
+            <div className="column is-one-third">
+              <Nutrition nutrition={recipe.nutrition} />
+            </div>
+            <div className="column">
+              <Reviews rating={recipe.rating} reviews={recipe.reviews} />
+            </div>
+          </div>
         </section>
       </div>
       <StructuredData recipe={recipe} />

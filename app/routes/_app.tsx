@@ -30,10 +30,10 @@ const Footer = () => (
 
 export default function App() {
   return (
-    <>
+    <div className="container is-max-desktop">
       <Header />
       <Outlet />
       <Footer />
-    </>
+    </div>
   );
 }
