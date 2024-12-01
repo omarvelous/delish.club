@@ -8,6 +8,11 @@ ol#instructions > li {
   padding-bottom: 2em;
 }
 
+ul#reviews {
+  list-style-type: none;
+  margin-left: 0;
+}
+
 .content dl {
   display: grid;
 }

@@ -52,6 +52,7 @@ type RecipeType = {
     id: number;
     rating: number;
     comment: string;
+    createdAt: string;
     user: {
       id: number;
       name: string;
@@ -168,6 +169,7 @@ export const loader = () => {
           id: 1,
           rating: 5,
           comment: "This is a great recipe!",
+          createdAt: "2024-08-01",
           user: {
             id: 1,
             name: "User 1",
@@ -177,6 +179,7 @@ export const loader = () => {
           id: 2,
           rating: 4,
           comment: "This is a good recipe!",
+          createdAt: "2024-08-01",
           user: {
             id: 2,
             name: "User 2",
@@ -333,22 +336,31 @@ const Nutrition = ({ nutrition }: { nutrition: RecipeType["nutrition"] }) => {
   );
 };
 
-const Rating = ({ rating }: { rating: number }) => {
+const Stars = ({ rating }: { rating: number }) => {
+  function className(rating: number, i: number) {
+    let className = "fa-regular fa-star";
+
+    if (rating >= i) {
+      className = "fa-solid fa-star";
+    } else if (i - rating <= 0.5) {
+      className = "fa-solid fa-star-half-stroke";
+    }
+
+    return className;
+  }
+
   return (
-    <div className="">
-      <div className="has-text-warning is-pulled-left">
-        <i aria-hidden="true" className="fa-solid fa-star"></i>
-        <i aria-hidden="true" className="fa-solid fa-star"></i>
-        <i aria-hidden="true" className="fa-solid fa-star"></i>
-        <i aria-hidden="true" className="fa-solid fa-star"></i>
-        <i aria-hidden="true" className="fa-regular fa-star-half-stroke"></i>
-      </div>
-      <span className="ml-2">{rating}</span>
-    </div>
+    <>
+      <i key={1} aria-hidden="true" className={className(rating, 1)}></i>
+      <i key={2} aria-hidden="true" className={className(rating, 2)}></i>
+      <i key={3} aria-hidden="true" className={className(rating, 3)}></i>
+      <i key={4} aria-hidden="true" className={className(rating, 4)}></i>
+      <i key={5} aria-hidden="true" className={className(rating, 5)}></i>
+    </>
   );
 };
 
-const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
+const Reviews = ({ rating, reviews }: { rating: RecipeType["rating"], reviews: RecipeType["reviews"] }) => {
   return (
     <div className="mt-6">
       <h3>
@@ -356,16 +368,21 @@ const Reviews = ({ reviews }: { reviews: RecipeType["reviews"] }) => {
           <span className="icon has-text-link">
             <i aria-hidden="true" className="fa-solid fa-star"></i>
           </span>
-          <Link to="#reviews">Reviews</Link>
+          <Link to="#reviews">Reviews <span className="subtitle is-size-6">{rating}</span></Link>
         </span>
         <span className="subtitle is-size-6 is-pulled-right has-text-grey">
-          {reviews.length}
+          ({reviews.length})
         </span>
       </h3>
       <ul id="reviews">
         {reviews.map((review) => (
           <li key={review.id}>
-            <Rating rating={review.rating} />
+            <div className="is-flex is-justify-content-space-between is-align-items-center">
+              <span className="has-text-warning">
+                <Stars rating={review.rating} />
+              </span>
+              <span className="is-size-7">{review.createdAt}</span>
+            </div>
             <p>{review.comment}</p>
             <p>By: {review.user.name}</p>
           </li>
@@ -389,9 +406,7 @@ const StructuredData = ({ recipe }: { recipe: RecipeType }) => {
       ratingValue: recipe.rating,
       reviewCount: recipe.reviews.length,
     },
-    recipeIngredient: recipe.ingredients.map(
-      (ingredient) => ingredient.name,
-    ),
+    recipeIngredient: recipe.ingredients.map((ingredient) => ingredient.name),
     recipeInstructions: recipe.instructions.map((instruction) => ({
       "@type": "HowToStep",
       text: instruction.description,
@@ -415,7 +430,10 @@ const StructuredData = ({ recipe }: { recipe: RecipeType }) => {
   };
 
   return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: `${JSON.stringify(content)}` }} />
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: `${JSON.stringify(content)}` }}
+    />
   );
 };
 
@@ -435,7 +453,12 @@ export default function Recipe() {
           <h1 className="title">
             {recipe.name}
             <div className="is-size-7 mt-1">
-              <Rating rating={recipe.rating} />
+              <span className="mr-1">{recipe.rating}</span>
+              <span className="mr-1 has-text-warning">
+                <Stars rating={recipe.rating} />
+              </span>
+              <span className="mr-1">({recipe.reviews.length})</span>
+              <span>{recipe.details.totalTime} min</span>
             </div>
           </h1>
         </div>
@@ -463,7 +486,7 @@ export default function Recipe() {
           <Ingredients ingredients={recipe.ingredients} />
           <Instructions instructions={recipe.instructions} />
           <Nutrition nutrition={recipe.nutrition} />
-          <Reviews reviews={recipe.reviews} />
+          <Reviews rating={recipe.rating} reviews={recipe.reviews} />
         </section>
       </div>
       <StructuredData recipe={recipe} />

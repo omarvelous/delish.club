@@ -1,4 +1,4 @@
-# RecipeDB
+# Delish.club
 
 
 ## Features
@@ -10,7 +10,14 @@
 - Create
 - Upload Images
 
+
+ToDo:
+- Pinterest - https://developers.pinterest.com/docs/web-features/recipe-rich-pins/
+- Facebook - 
+- Twitter -
+
 - 📖 [Remix docs](https://remix.run/docs)
+
 
 ## Development
 
