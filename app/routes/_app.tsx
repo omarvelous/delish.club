@@ -30,10 +30,10 @@ const Footer = () => (
 
 export default function App() {
   return (
-    <div className="container is-fullhd">
-      <Header />
-      <Outlet />
-      <Footer />
-    </div>
+    <>
+    <Header />
+    <Outlet />
+    <Footer />
+    </>
   );
 }
