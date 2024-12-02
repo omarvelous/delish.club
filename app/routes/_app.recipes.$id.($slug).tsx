@@ -77,10 +77,10 @@ export const loader = () => {
   return {
     recipe: {
       id: 1,
-      name: "Cookies",
+      name: "The Best Chocolate Chip Cookies",
       summary: "A delicious cookie recipe.",
       publishedAtDate: "2024-08-01",
-      category: "Dessert",
+      category: "Cookies",
       cuisine: "American",
       rating: 4.5,
       images: {
@@ -96,6 +96,12 @@ export const loader = () => {
           amount: 12,
           unit: "cookies",
         },
+      },
+      nutrition: {
+        calories: 100,
+        fat: 10,
+        carbs: 20,
+        protein: 5,
       },
       ingredients: [
         {
@@ -189,12 +195,6 @@ export const loader = () => {
           },
         },
       ],
-      nutrition: {
-        calories: 100,
-        fat: 10,
-        carbs: 20,
-        protein: 5,
-      },
     },
   };
 };
@@ -357,6 +357,9 @@ const Instructions = ({
           <Link to="#instructions">Instructions</Link>
         </span>
       </h3>
+      <progress className="progress is-link" value="15" max="100">
+        15%
+      </progress>
       <ol id="instructions">
         {instructions.map((instruction, i) => (
           <li key={instruction.id} className="mb-2">
@@ -509,6 +512,27 @@ export default function Recipe() {
       </section>
       <div className="content">
         <section className="section">
+          <nav
+            className="breadcrumb has-succeeds-separator is-small"
+            aria-label="breadcrumbs"
+          >
+            <ul>
+              <li>
+                <a href="/recipes">Recipes</a>
+              </li>
+              <li>
+                <a href="#">Desserts</a>
+              </li>
+              <li>
+                <a href="#">Cookies</a>
+              </li>
+              <li className="is-active">
+                <a href="#" aria-current="page">
+                  Best Cookies Ever
+                </a>
+              </li>
+            </ul>
+          </nav>
           <blockquote>{recipe.summary}</blockquote>
           <div className="columns">
             <div className="column is-one-third">

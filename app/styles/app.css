@@ -15,6 +15,13 @@ ul.pagination-list {
   margin: 0 !important;
 }
 
+.breadcrumb ul {
+  margin-inline-start: 0;
+}
+.breadcrumb li {
+  margin: 0 !important;
+}
+
 .content dl {
   display: grid;
 }
