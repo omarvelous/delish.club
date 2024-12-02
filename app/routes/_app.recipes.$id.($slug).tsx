@@ -13,6 +13,7 @@ type RecipeType = {
   id: number;
   name: string;
   summary: string;
+  slug: string;
   publishedAtDate: string;
   category: string;
   cuisine: string;
@@ -71,131 +72,137 @@ type RecipeType = {
 
 type LoaderData = {
   recipe: RecipeType;
+  url: string;
 };
 
 export const loader = () => {
-  return {
-    recipe: {
-      id: 1,
-      name: "The Best Chocolate Chip Cookies",
-      summary: "A delicious cookie recipe.",
-      publishedAtDate: "2024-08-01",
-      category: "Cookies",
-      cuisine: "American",
-      rating: 4.5,
-      images: {
-        cover:
-          "https://cdn.loveandlemons.com/wp-content/uploads/2024/08/chocolate-chip-cookie-recipe.jpg",
-      },
-      details: {
-        prepTime: 10,
-        cookTime: 20,
-        totalTime: 30,
-        servings: 12,
-        yield: {
-          amount: 12,
-          unit: "cookies",
-        },
-      },
-      nutrition: {
-        calories: 100,
-        fat: 10,
-        carbs: 20,
-        protein: 5,
-      },
-      ingredients: [
-        {
-          id: 1,
-          name: "Ingredient 1",
-        },
-        {
-          id: 2,
-          name: "Ingredient 2",
-        },
-      ],
-      instructions: [
-        {
-          id: 1,
-          name: "Mix the Batter",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta lacus vitae urna auctor, et imperdiet nisl vestibulum. Ut vitae risus a metus rhoncus tincidunt.",
-          type: DirectionTypeEnum.Prep,
-          timeInSeconds: 300,
-          ingredients: [
-            {
-              id: 1,
-              name: "Ingredient 1",
-              amount: "1 cup",
-            },
-            {
-              id: 2,
-              name: "Ingredient 2",
-              amount: "2 cups",
-            },
-          ],
-          images: [
-            {
-              id: 1,
-              src: "https://info.ehl.edu/hubfs/Imported_Blog_Media/1440x960-cooking-terms-1.jpg",
-              alt: "Mix the eggs",
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "Mix the Eggs",
-          description:
-            "Nunc tempor mattis nunc, eget tincidunt ligula vehicula eget.",
-          type: DirectionTypeEnum.Prep,
-          timeInSeconds: 300,
-          ingredients: [
-            {
-              id: 1,
-              name: "Ingredient 1",
-              amount: null,
-            },
-            {
-              id: 2,
-              name: "Ingredient 2",
-              amount: "2 cups",
-            },
-          ],
-          images: [],
-        },
-        {
-          id: 3,
-          name: "Bake the Cake",
-          description:
-            "Donec in volutpat augue, eu feugiat sapien. Morbi id nunc eu ipsum dapibus eleifend quis et lorem.",
-          type: DirectionTypeEnum.Cook,
-          timeInSeconds: 300,
-          ingredients: [],
-          images: [],
-        },
-      ],
-      reviews: [
-        {
-          id: 1,
-          rating: 5,
-          comment: "This is a great recipe!",
-          createdAt: "2024-08-01",
-          user: {
-            id: 1,
-            name: "User 1",
-          },
-        },
-        {
-          id: 2,
-          rating: 4,
-          comment: "This is a good recipe!",
-          createdAt: "2024-08-01",
-          user: {
-            id: 2,
-            name: "User 2",
-          },
-        },
-      ],
+  const recipe = {
+    id: 1,
+    name: "The Best Chocolate Chip Cookies",
+    summary: "A delicious cookie recipe.",
+    slug: "the-best-chocolate-chip-cookies",
+    publishedAtDate: "2024-08-01",
+    category: "Cookies",
+    cuisine: "American",
+    rating: 4.5,
+    images: {
+      cover:
+        "https://cdn.loveandlemons.com/wp-content/uploads/2024/08/chocolate-chip-cookie-recipe.jpg",
     },
+    details: {
+      prepTime: 10,
+      cookTime: 20,
+      totalTime: 30,
+      servings: 12,
+      yield: {
+        amount: 12,
+        unit: "cookies",
+      },
+    },
+    nutrition: {
+      calories: 100,
+      fat: 10,
+      carbs: 20,
+      protein: 5,
+    },
+    ingredients: [
+      {
+        id: 1,
+        name: "Ingredient 1",
+      },
+      {
+        id: 2,
+        name: "Ingredient 2",
+      },
+    ],
+    instructions: [
+      {
+        id: 1,
+        name: "Mix the Batter",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In porta lacus vitae urna auctor, et imperdiet nisl vestibulum. Ut vitae risus a metus rhoncus tincidunt.",
+        type: DirectionTypeEnum.Prep,
+        timeInSeconds: 300,
+        ingredients: [
+          {
+            id: 1,
+            name: "Ingredient 1",
+            amount: "1 cup",
+          },
+          {
+            id: 2,
+            name: "Ingredient 2",
+            amount: "2 cups",
+          },
+        ],
+        images: [
+          {
+            id: 1,
+            src: "https://info.ehl.edu/hubfs/Imported_Blog_Media/1440x960-cooking-terms-1.jpg",
+            alt: "Mix the eggs",
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "Mix the Eggs",
+        description:
+          "Nunc tempor mattis nunc, eget tincidunt ligula vehicula eget.",
+        type: DirectionTypeEnum.Prep,
+        timeInSeconds: 300,
+        ingredients: [
+          {
+            id: 1,
+            name: "Ingredient 1",
+            amount: null,
+          },
+          {
+            id: 2,
+            name: "Ingredient 2",
+            amount: "2 cups",
+          },
+        ],
+        images: [],
+      },
+      {
+        id: 3,
+        name: "Bake the Cake",
+        description:
+          "Donec in volutpat augue, eu feugiat sapien. Morbi id nunc eu ipsum dapibus eleifend quis et lorem.",
+        type: DirectionTypeEnum.Cook,
+        timeInSeconds: 300,
+        ingredients: [],
+        images: [],
+      },
+    ],
+    reviews: [
+      {
+        id: 1,
+        rating: 5,
+        comment: "This is a great recipe!",
+        createdAt: "2024-08-01",
+        user: {
+          id: 1,
+          name: "User 1",
+        },
+      },
+      {
+        id: 2,
+        rating: 4,
+        comment: "This is a good recipe!",
+        createdAt: "2024-08-01",
+        user: {
+          id: 2,
+          name: "User 2",
+        },
+      },
+    ],
+  } as RecipeType;
+  const url = new URL(`/recipes/${recipe.id}/${recipe.slug}`, process.env.BASE_URL).toString();
+
+  return {
+    recipe,
+    url,
   };
 };
 
@@ -204,7 +211,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [];
   }
 
-  const { recipe } = data;
+  const { recipe, url } = data;
 
   return [
     { title: recipe.name },
@@ -213,7 +220,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { property: "og:title", content: recipe.name },
     { property: "og:description", content: recipe.summary },
     { property: "og:site_name", content: "Delish.club" },
-    { property: "og:url", content: "https://example.com" },
+    { property: "og:url", content: url },
     { property: "og:locale", content: "en_US" },
     { property: "og:image", content: recipe.images.cover },
     { property: "twitter:card", content: "summary_large_image" },
