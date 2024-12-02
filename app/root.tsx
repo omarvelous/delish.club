@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  useLocation
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import Posthog from "posthog-js";
 
 export const links: LinksFunction = () => [
   {
@@ -14,7 +18,23 @@ export const links: LinksFunction = () => [
   },
 ];
 
+type LoaderData = {
+  ENV: {
+    POSTHOG_API_KEY: string | undefined;
+  };
+};
+
+export const loader: LoaderFunction = () => {
+  return {
+    ENV: {
+      POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
+    },
+  };
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { ENV } = useLoaderData<LoaderData>();
+
   return (
     <html lang="en" data-theme="light">
       <head>
@@ -30,12 +50,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <ScrollRestoration />
-        <Scripts />
+        {ENV && (
+          <>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.ENV = ${JSON.stringify(ENV)}`,
+              }}
+            />
+            <Scripts />
+          </>
+        )}
       </body>
     </html>
   );
 }
 
 export default function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    Posthog.capture("$pageview");
+  }, [location]);
+
   return <Outlet />;
 }
