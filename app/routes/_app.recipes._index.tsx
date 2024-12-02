@@ -1,5 +1,4 @@
 import { useLoaderData, Link } from "@remix-run/react";
-import { dasherize } from "~/lib/helpers";
 import Stars from "~/components/stars";
 
 type LoaderData = {
@@ -7,6 +6,7 @@ type LoaderData = {
     id: number;
     name: string;
     summary: string;
+    slug: string;
     rating: number;
     reviewsCount: number;
     images: {
@@ -22,6 +22,7 @@ export const loader = () => {
         id: 1,
         name: "Pasta",
         summary: "This is a pasta recipe",
+        slug: "pasta",
         rating: 4,
         reviewsCount: 100,
         images: {
@@ -33,6 +34,7 @@ export const loader = () => {
         id: 2,
         name: "Pizza",
         summary: "This is a pizza recipe",
+        slug: "pizza",
         rating: 4,
         reviewsCount: 100,
         images: {
@@ -44,6 +46,7 @@ export const loader = () => {
         id: 3,
         name: "Burger",
         summary: "This is a burger recipe",
+        slug: "burger",
         rating: 4,
         reviewsCount: 100,
         images: {
@@ -263,7 +266,7 @@ export default function Recipes() {
                       <div className="card-content">
                         <h3>
                           <Link
-                            to={`/recipes/${recipe.id}/${dasherize(recipe.name)}`}
+                            to={`/recipes/${recipe.id}/${recipe.slug}`}
                           >
                             {recipe.name}
                           </Link>
