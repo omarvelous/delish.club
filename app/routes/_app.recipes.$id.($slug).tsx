@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useLoaderData, Link } from "@remix-run/react";
 import { MetaFunction } from "@remix-run/node";
 
@@ -280,6 +281,67 @@ const Ingredients = ({
   );
 };
 
+const Instruction = ({
+  instruction,
+  index,
+}: {
+  instruction: RecipeType["instructions"][0];
+  index: number;
+}) => {
+  const [isComplete, SetIsComplete] = useState(false);
+
+  const handleChange = () => {
+    SetIsComplete(!isComplete);
+  };
+
+  return (
+    <>
+      <span className="has-text-weight-semibold">Step {index}</span>
+      <h4>
+        <span className="mr-1">
+          <input type="checkbox" checked={isComplete} onChange={handleChange} />
+        </span>
+        <Link to={`#instruction-${index}`}>{instruction.name}</Link>
+        <span className="subtitle is-size-6 is-pulled-right has-text-grey">
+          <span className="icon-text">
+            <span className="icon">
+              <i aria-hidden="true" className="fa-regular fa-clock"></i>
+            </span>
+            {instruction.timeInSeconds} sec
+          </span>
+        </span>
+      </h4>
+      <div className={isComplete ? "is-hidden" : ""}>
+        <div className="columns mb-2">
+          <div className="column">
+            {instruction.ingredients && (
+              <>
+                <ul className="ingredients">
+                  {instruction.ingredients.map((ingredient) => (
+                    <li key={ingredient.id}>
+                      {ingredient.name}{" "}
+                      {ingredient.amount && <>- {ingredient.amount}</>}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <p>{instruction.description}</p>
+          </div>
+          <div className="column is-two-fifths">
+            {instruction.images.map((image) => (
+              <figure key={image.id} className="">
+                <img src={image.src} alt={image.alt} />
+                <figcaption>{image.alt}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const Instructions = ({
   instructions,
 }: {
@@ -296,42 +358,9 @@ const Instructions = ({
         </span>
       </h3>
       <ol id="instructions">
-        {instructions.map((direction, i) => (
-          <li key={direction.id}>
-            <span className="has-text-weight-semibold">Step {i + 1}</span>
-            <h4>
-              <span className="mr-1">
-                <input type="checkbox" />
-              </span>
-              <Link to={`#direction-${i + 1}`}>{direction.name}</Link>
-              <span className="subtitle is-size-6 is-pulled-right has-text-grey">
-                <span className="icon-text">
-                  <span className="icon">
-                    <i aria-hidden="true" className="fa-regular fa-clock"></i>
-                  </span>
-                  {direction.timeInSeconds} sec
-                </span>
-              </span>
-            </h4>
-            {direction.ingredients && (
-              <>
-                <ul className="ingredients">
-                  {direction.ingredients.map((ingredient) => (
-                    <li key={ingredient.id}>
-                      {ingredient.name}{" "}
-                      {ingredient.amount && <>- {ingredient.amount}</>}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            <p>{direction.description}</p>
-            {direction.images.map((image) => (
-              <figure key={image.id}>
-                <img src={image.src} alt={image.alt} />
-                <figcaption>{image.alt}</figcaption>
-              </figure>
-            ))}
+        {instructions.map((instruction, i) => (
+          <li key={instruction.id} className="mb-2">
+            <Instruction instruction={instruction} index={i + 1} />
           </li>
         ))}
       </ol>
