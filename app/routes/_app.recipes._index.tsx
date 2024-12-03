@@ -12,49 +12,55 @@ type LoaderData = {
     images: {
       cover: string;
     };
+    updatedAt: string;
   }[];
 };
 
+export const recipes = [
+  {
+    id: 1,
+    name: "Pasta",
+    summary: "This is a pasta recipe",
+    slug: "pasta",
+    rating: 4,
+    reviewsCount: 100,
+    images: {
+      cover:
+        "https://www.allrecipes.com/thmb/mvO1mRRH1zTz1SvbwBCTz78CRJI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/67700_RichPastaforthePoorKitchen_ddmfs_4x3_2284-220302ec8328442096df370dede357d7.jpg",
+    },
+    updatedAt: "2022-02-22T12:00:00+00:00",
+  },
+  {
+    id: 2,
+    name: "Pizza",
+    summary: "This is a pizza recipe",
+    slug: "pizza",
+    rating: 4,
+    reviewsCount: 100,
+    images: {
+      cover:
+        "https://www.rachelcooks.com/wp-content/uploads/2022/02/one-pan-pizza-pasta-1500-9-square.jpg",
+    },
+    updatedAt: "2022-02-22T12:00:00+00:00",
+  },
+  {
+    id: 3,
+    name: "Burger",
+    summary: "This is a burger recipe",
+    slug: "burger",
+    rating: 4,
+    reviewsCount: 100,
+    images: {
+      cover:
+        "https://www.foodandwine.com/thmb/DI29Houjc_ccAtFKly0BbVsusHc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg",
+    },
+    updatedAt: "2022-02-22T12:00:00+00:00",
+  },
+];
+
 export const loader = () => {
   return {
-    recipes: [
-      {
-        id: 1,
-        name: "Pasta",
-        summary: "This is a pasta recipe",
-        slug: "pasta",
-        rating: 4,
-        reviewsCount: 100,
-        images: {
-          cover:
-            "https://www.allrecipes.com/thmb/mvO1mRRH1zTz1SvbwBCTz78CRJI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/67700_RichPastaforthePoorKitchen_ddmfs_4x3_2284-220302ec8328442096df370dede357d7.jpg",
-        },
-      },
-      {
-        id: 2,
-        name: "Pizza",
-        summary: "This is a pizza recipe",
-        slug: "pizza",
-        rating: 4,
-        reviewsCount: 100,
-        images: {
-          cover:
-            "https://www.rachelcooks.com/wp-content/uploads/2022/02/one-pan-pizza-pasta-1500-9-square.jpg",
-        },
-      },
-      {
-        id: 3,
-        name: "Burger",
-        summary: "This is a burger recipe",
-        slug: "burger",
-        rating: 4,
-        reviewsCount: 100,
-        images: {
-          cover:
-            "https://www.foodandwine.com/thmb/DI29Houjc_ccAtFKly0BbVsusHc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/crispy-comte-cheesburgers-FT-RECIPE0921-6166c6552b7148e8a8561f7765ddf20b.jpg",
-        },
-      },
-    ],
+    recipes
   };
 };
 
